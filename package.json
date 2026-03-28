@@ -1,0 +1,13 @@
+{
+  "name": "portfolio-ssg",
+  "version": "2.0.0",
+  "description": "Portfolio de Serigne Saliou GNINGUE — Génie Logiciel & Cybersécurité (Supabase)",
+  "scripts": {
+    "dev":   "npm run dev --prefix client",
+    "build": "npm run build --prefix client",
+    "start": "npm run preview --prefix client"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

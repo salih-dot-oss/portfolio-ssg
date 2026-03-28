@@ -1,0 +1,26 @@
+# Dépendances
+node_modules/
+client/node_modules/
+
+# Build
+client/dist/
+public/
+
+# Variables d'environnement (ne jamais commiter !)
+.env
+client/.env
+*.env.local
+
+# Données locales (plus utilisées, remplacées par Supabase)
+data/
+uploads/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Système
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
