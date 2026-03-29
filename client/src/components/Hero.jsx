@@ -1,15 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const PHRASES = [
-  'Étudiant en Génie Logiciel 💻',
-  'Étudiant en Cybersécurité 🔒',
-  'Développeur Full-Stack 🚀',
-  'Passionné de code & réseaux ⚡',
-  'Futur ingénieur logiciel 🎯',
+  'Étudiant en Génie Logiciel',
+  'Étudiant en Cybersécurité',
 ]
 
 export default function Hero() {
-  const canvasRef = useRef(null)
   const [typedText, setTypedText] = useState('')
 
   // ── Typing animation ────────────────────────────────────
@@ -29,100 +25,67 @@ export default function Hero() {
     return () => clearTimeout(timer)
   }, [])
 
-  // ── Canvas particles ────────────────────────────────────
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx  = canvas.getContext('2d')
-    let W, H, dots = [], raf
-
-    function resize() {
-      W = canvas.width  = canvas.offsetWidth
-      H = canvas.height = canvas.offsetHeight
-    }
-    resize()
-    window.addEventListener('resize', resize, { passive: true })
-
-    for (let i = 0; i < 80; i++) {
-      dots.push({
-        x: Math.random() * 1200, y: Math.random() * 800,
-        r: Math.random() * 1.5 + 0.5,
-        vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
-        a: Math.random()
-      })
-    }
-
-    function draw() {
-      ctx.clearRect(0, 0, W, H)
-      dots.forEach(d => {
-        d.x += d.vx; d.y += d.vy
-        if (d.x < 0) d.x = W; if (d.x > W) d.x = 0
-        if (d.y < 0) d.y = H; if (d.y > H) d.y = 0
-        ctx.beginPath()
-        ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(159,122,234,${d.a * 0.6})`
-        ctx.fill()
-      })
-      for (let i = 0; i < dots.length; i++) {
-        for (let j = i + 1; j < dots.length; j++) {
-          const dx = dots[i].x - dots[j].x, dy = dots[i].y - dots[j].y
-          const dist = Math.sqrt(dx*dx + dy*dy)
-          if (dist < 120) {
-            ctx.beginPath()
-            ctx.moveTo(dots[i].x, dots[i].y)
-            ctx.lineTo(dots[j].x, dots[j].y)
-            ctx.strokeStyle = `rgba(102,126,234,${0.15*(1-dist/120)})`
-            ctx.lineWidth = 0.8
-            ctx.stroke()
-          }
-        }
-      }
-      raf = requestAnimationFrame(draw)
-    }
-    draw()
-
-    return () => {
-      cancelAnimationFrame(raf)
-      window.removeEventListener('resize', resize)
-    }
-  }, [])
-
   return (
     <section id="hero" className="hero">
-      <canvas ref={canvasRef} className="hero-canvas" />
+      {/* Fond immersif */}
+      <div className="hero-grid-overlay" />
       <div className="hero-orb orb-1" /><div className="hero-orb orb-2" /><div className="hero-orb orb-3" />
 
-      <div className="hero-content">
-        <div className="hero-badge">
-          <span className="hero-badge-dot" />
-          Disponible pour stages &amp; projets
+      <div className="container hero-container">
+        
+        {/* Colonne Texte */}
+        <div className="hero-content reveal-left">
+          <div className="hero-badge">
+            <span className="hero-badge-dot" />
+            Disponible pour stages &amp; projets
+          </div>
+
+          <h1 className="hero-name">
+            Serigne Saliou<br />
+            <span className="gradient-text-modern">GNINGUE</span>
+          </h1>
+
+          <div className="hero-typing-wrap">
+            <div className="hero-typing">
+              {typedText}<span className="cursor" />
+            </div>
+          </div>
+
+          <p className="hero-tagline">
+            <strong>Génie Logiciel &amp; Cybersécurité</strong><br />
+            <span>Construire, Apprendre, Évoluer — <em>un code à la fois.</em></span>
+          </p>
+
+          <div className="hero-ctas">
+            <a href="#projects" className="btn btn-primary btn-glow">
+              <i className="fas fa-code"></i> Voir mes projets
+            </a>
+            <a href="#contact" className="btn btn-outline">
+              <i className="fas fa-paper-plane"></i> Me contacter
+            </a>
+          </div>
         </div>
 
-        <h1 className="hero-name">
-          <span className="gradient-text">Serigne Saliou</span><br />GNINGUE
-        </h1>
-
-        <div className="hero-typing">
-          {typedText}<span className="cursor" />
+        {/* Colonne Visuelle (Avatar Pop-out Premium) */}
+        <div className="hero-visual reveal-right">
+          <div className="hero-avatar-wrapper">
+             {/* Halo lumineux (Glow) */}
+             <div className="avatar-glow-pulse" />
+             
+             {/* Le portrait (Style Pop-out) */}
+             <div className="about-avatar hero-avatar-premium">
+                <div className="avatar-bg"></div>
+                <div className="avatar-body">
+                   <img src="/Megemini.png" alt="Serigne Saliou GNINGUE" />
+                </div>
+                <div className="avatar-ring-front" />
+                <div className="avatar-head">
+                   <img src="/Megemini.png" alt="Serigne Saliou GNINGUE" />
+                </div>
+             </div>
+          </div>
         </div>
 
-        <p className="hero-tagline">
-          Construire, Apprendre, Évoluer — <em>un code à la fois.</em>
-        </p>
-
-        <div className="hero-ctas">
-          <a href="#projects" className="btn btn-primary">
-            <i className="fas fa-code"></i> Voir mes projets
-          </a>
-          <a href="#contact" className="btn btn-outline">
-            <i className="fas fa-paper-plane"></i> Me contacter
-          </a>
-        </div>
-      </div>
-
-      <div className="hero-scroll">
-        <div className="scroll-dot" />
-        <span>SCROLL</span>
       </div>
     </section>
   )

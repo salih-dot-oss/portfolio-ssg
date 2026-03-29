@@ -5,7 +5,7 @@ export default function Footer() {
         <div className="footer-inner">
           <div className="footer-logo gradient-text">SSG.</div>
           <p className="footer-text">
-            © {new Date().getFullYear()} <strong>Serigne Saliou GNINGUE</strong> — Conçu avec ❤️ &amp; passion
+            © {new Date().getFullYear()} <strong>Serigne Saliou GNINGUE</strong> — Conçu avec &amp; passion
           </p>
           <div className="footer-social">
             <a href="https://github.com/salih-dot-oss" target="_blank" rel="noreferrer" title="GitHub"><i className="fab fa-github"></i></a>

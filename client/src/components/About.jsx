@@ -8,11 +8,8 @@ export default function About() {
       <div className="container" ref={ref}>
         <div className="about-grid">
 
-          {/* Visuel gauche */}
+          {/* Stats gauche */}
           <div className="reveal">
-            <div className="about-avatar">
-              <div className="about-avatar-inner">🧑‍💻</div>
-            </div>
             <div className="about-stats">
               {[
                 { num: '2+', label: 'Années de formation' },
@@ -56,7 +53,7 @@ export default function About() {
             </p>
 
             <div className="about-tags">
-              {['Génie Logiciel','Cybersécurité','Algorithmique','Bases de données','Réseaux','Open Source'].map(t => (
+              {['Cybersécurité','Algorithmique','Bases de données','Réseaux'].map(t => (
                 <span key={t} className="tag">{t}</span>
               ))}
             </div>

@@ -2,26 +2,34 @@ import { useReveal } from '../hooks/useReveal'
 
 const TIMELINE = [
   {
-    emoji: '🏛️',
-    period: '2023 — Présent',
+    period: 'Licence 2 — 2025 · Présent',
+    degree: 'GLSI — Génie Logiciel & Systèmes d\'Information',
     school: 'École Supérieure Polytechnique (ESP) — Dakar',
-    degree: 'Licence en Génie Logiciel & Systèmes d\'Information',
-    desc: "Formation d'excellence axée sur la conception et le développement de systèmes informatiques complexes. Acquisition de bases solides en algorithmique, architecture logicielle et gestion de projets.",
-    tags: ['Algorithmique','Structures de données','Bases de données','Génie Logiciel','UML / Merise','Conception d\'applications'],
+    icon: 'fa-university',
+    desc: "Approfondissement en architecture logicielle, conception de systèmes complexes et gestion de projets informatiques.",
+    tags: ['Algorithmique','Architecture logicielle','Bases de données','UML / Merise','Génie Logiciel'],
   },
   {
-    emoji: '🔒',
-    period: '2023 — Présent',
+    period: 'Licence 1 — 2024 · 2025',
+    degree: 'GLSI — Génie Logiciel & Systèmes d\'Information',
+    school: 'École Supérieure Polytechnique (ESP) — Dakar',
+    icon: 'fa-university',
+    desc: "Fondations solides en algorithmique, programmation orientée objet, bases de données et conception d'applications.",
+    tags: ['Algorithmique','Structures de données','Programmation','Conception d\'applications'],
+  },
+  {
+    period: 'Licence 1 — 2024 · Présent',
+    degree: 'SIMAC — Sécurité Informatique & Mobilité dans les Applications et les Communications',
     school: 'Université Virtuelle du Sénégal (UVS)',
-    degree: 'Formation en Cybersécurité (niveau débutant)',
-    desc: 'Formation complémentaire qui enrichit ma vision du développement logiciel avec une approche orientée sécurité. Compréhension des vulnérabilités et des principes de défense des systèmes.',
-    tags: ['Sécurité informatique','Vulnérabilités','Réseaux','Raisonnement sécurité'],
+    icon: 'fa-user-shield',
+    desc: 'Formation orientée sécurité des systèmes d\'information, réseaux et mobilité. Compréhension des vulnérabilités et des principes de défense.',
+    tags: ['Sécurité informatique','Réseaux','OSINT','Cryptographie','Cyberdéfense'],
   },
   {
-    emoji: '🎓',
-    period: '2023',
-    school: 'Baccalauréat',
-    degree: 'Diplôme de fin d\'études secondaires',
+    period: '2024',
+    degree: 'Baccalauréat — Diplôme de fin d\'études secondaires',
+    school: 'Collège Moderne Troisième Millénaire — Groupe Les Pédagogues',
+    icon: 'fa-certificate',
     desc: "Obtention du baccalauréat, porte d'entrée vers les études supérieures en ingénierie et informatique.",
     tags: [],
   },
@@ -44,11 +52,11 @@ export default function Education() {
         <div className="timeline">
           {TIMELINE.map((item, i) => (
             <div key={i} className="timeline-item reveal">
-              <div className="timeline-dot">{item.emoji}</div>
+              <div className="timeline-dot"><i className={`fas ${item.icon}`}></i></div>
               <div className="timeline-card">
                 <div className="timeline-period">{item.period}</div>
-                <div className="timeline-school">{item.school}</div>
                 <div className="timeline-degree">{item.degree}</div>
+                {item.school && <div className="timeline-school">{item.school}</div>}
                 <p className="timeline-desc">{item.desc}</p>
                 {item.tags.length > 0 && (
                   <div className="timeline-tags">

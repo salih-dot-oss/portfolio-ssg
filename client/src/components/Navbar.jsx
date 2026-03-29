@@ -38,28 +38,30 @@ export default function Navbar() {
   return (
     <>
       <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
-        <div className="container">
-          <div className="nav-inner">
-            <a href="#hero" className="nav-logo">SSG.</a>
+        <div className="nav-inner-full">
+          <a href="#hero" className="nav-logo">SSG.</a>
 
-            <ul className="nav-links">
-              {NAV_LINKS.map(l => (
-                <li key={l.href}>
-                  <a href={l.href} className={activeLink === l.href ? 'active' : ''}>
-                    {l.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
+          <ul className="nav-links">
+            {NAV_LINKS.map(l => (
+              <li key={l.href}>
+                <a href={l.href} className={activeLink === l.href ? 'active' : ''}>
+                  {l.label}
+                </a>
+              </li>
+            ))}
+          </ul>
 
-            <div className="nav-actions">
-              <button className="icon-btn" onClick={toggleTheme} title="Changer de thème">
-                <i className={`fas ${isDark ? 'fa-moon' : 'fa-sun'}`}></i>
-              </button>
-              <button className="hamburger" onClick={() => setMenuOpen(o => !o)} aria-label="Menu">
-                <span /><span /><span />
-              </button>
-            </div>
+          <div className="nav-actions">
+            <button className="lamp-switch" onClick={toggleTheme} title="Changer de thème" aria-label="Thème">
+              <span className="lamp-track">
+                <span className={`lamp-thumb ${isDark ? 'lamp-thumb--dark' : 'lamp-thumb--light'}`}>
+                  <i className={`fas ${isDark ? 'fa-moon' : 'fa-sun'}`}></i>
+                </span>
+              </span>
+            </button>
+            <button className="hamburger" onClick={() => setMenuOpen(o => !o)} aria-label="Menu">
+              <span /><span /><span />
+            </button>
           </div>
         </div>
       </nav>
@@ -69,6 +71,13 @@ export default function Navbar() {
         {NAV_LINKS.map(l => (
           <a key={l.href} href={l.href} onClick={closeMenu}>{l.label}</a>
         ))}
+        {/* <button className="lamp-switch lamp-switch--mobile" onClick={toggleTheme}>
+          <span className="lamp-track">
+            <span className={`lamp-thumb ${isDark ? 'lamp-thumb--dark' : 'lamp-thumb--light'}`}>
+              <i className={`fas ${isDark ? 'fa-moon' : 'fa-sun'}`}></i>
+            </span>
+          </span>
+        </button> */}
       </nav>
     </>
   )

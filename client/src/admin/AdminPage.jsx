@@ -267,6 +267,13 @@ function ProjectsManager({ showToast, onRefreshStats }) {
     showToast('Projet supprimé'); load(); onRefreshStats()
   }
 
+  const togglePublish = async p => {
+    const { error } = await supabase.from('projects').update({ published: !p.published }).eq('id', p.id)
+    if (error) return showToast(error.message, 'error')
+    showToast(p.published ? 'Projet retiré du portfolio' : 'Projet publié dans le portfolio !', p.published ? 'info' : 'success')
+    load()
+  }
+
   return (
     <div>
       <div className="card">
@@ -275,7 +282,7 @@ function ProjectsManager({ showToast, onRefreshStats }) {
           <button className="btn btn-primary btn-sm" onClick={() => openModal()}><i className="fas fa-plus"></i> Nouveau projet</button>
         </div>
         <table>
-          <thead><tr><th>Projet</th><th>Technologies</th><th>Liens</th><th>Actions</th></tr></thead>
+          <thead><tr><th>Projet</th><th>Technologies</th><th>Statut</th><th>Actions</th></tr></thead>
           <tbody>
             {projects.length === 0
               ? <tr><td colSpan="4"><div className="empty-state"><i className="fas fa-folder-open"></i><p>Aucun projet. Créez le premier !</p></div></td></tr>
@@ -297,9 +304,18 @@ function ProjectsManager({ showToast, onRefreshStats }) {
                       {(p.tech || []).map(t => <span key={t} className="tech-badge">{t}</span>)}
                     </div>
                   </td>
-                  <td style={{ fontSize:'0.82rem' }}>
-                    {p.github_url && <a href={p.github_url} target="_blank" rel="noreferrer" style={{ color:'var(--accent)', display:'block' }}><i className="fab fa-github"></i> GitHub</a>}
-                    {p.live_url   && <a href={p.live_url}   target="_blank" rel="noreferrer" style={{ color:'var(--blue)',   display:'block' }}><i className="fas fa-external-link-alt"></i> Live</a>}
+                  <td>
+                    <button
+                      onClick={() => togglePublish(p)}
+                      style={{
+                        padding: '5px 12px', borderRadius: 20, border: 'none', cursor: 'pointer', fontSize: '0.78rem', fontWeight: 600,
+                        background: p.published ? 'rgba(74,222,128,0.15)' : 'rgba(248,113,113,0.15)',
+                        color: p.published ? 'var(--green)' : 'var(--red)',
+                      }}
+                    >
+                      <i className={`fas ${p.published ? 'fa-eye' : 'fa-eye-slash'}`} style={{ marginRight:5 }}></i>
+                      {p.published ? 'Publié' : 'Retiré'}
+                    </button>
                   </td>
                   <td>
                     <div className="actions">
@@ -419,6 +435,7 @@ function CertsManager({ showToast, onRefreshStats }) {
         category:   form.category,
         verify_url: form.verify_url.trim() || null,
         file_url:   fileUrl,
+        published:  modal?.id ? modal.published : true,
       }
 
       const isEdit = modal?.id
@@ -443,6 +460,13 @@ function CertsManager({ showToast, onRefreshStats }) {
     showToast('Certificat supprimé'); load(); onRefreshStats()
   }
 
+  const togglePublish = async c => {
+    const { error } = await supabase.from('certificates').update({ published: !c.published }).eq('id', c.id)
+    if (error) return showToast(error.message, 'error')
+    showToast(c.published ? 'Certificat retiré du portfolio' : 'Certificat publié dans le portfolio !', c.published ? 'info' : 'success')
+    load()
+  }
+
   return (
     <div>
       <div className="card">
@@ -451,10 +475,10 @@ function CertsManager({ showToast, onRefreshStats }) {
           <button className="btn btn-primary btn-sm" onClick={() => openModal()}><i className="fas fa-plus"></i> Nouveau certificat</button>
         </div>
         <table>
-          <thead><tr><th>Certification</th><th>Organisme</th><th>Date</th><th>Catégorie</th><th>Fichier</th><th>Actions</th></tr></thead>
+          <thead><tr><th>Certification</th><th>Organisme</th><th>Date</th><th>Catégorie</th><th>Fichier</th><th>Statut</th><th>Actions</th></tr></thead>
           <tbody>
             {certs.length === 0
-              ? <tr><td colSpan="6"><div className="empty-state"><i className="fas fa-certificate"></i><p>Aucun certificat.</p></div></td></tr>
+              ? <tr><td colSpan="7"><div className="empty-state"><i className="fas fa-certificate"></i><p>Aucun certificat.</p></div></td></tr>
               : certs.map(c => (
                 <tr key={c.id}>
                   <td style={{ fontWeight:600, fontSize:'0.88rem' }}>{c.name}</td>
@@ -466,6 +490,20 @@ function CertsManager({ showToast, onRefreshStats }) {
                       ? <a href={c.file_url} target="_blank" rel="noreferrer" style={{ color:'var(--green)', fontSize:'0.82rem' }}><i className="fas fa-file-alt"></i> Voir</a>
                       : <span style={{ color:'var(--t3)', fontSize:'0.82rem' }}>—</span>
                     }
+                  </td>
+                  <td>
+                    <button
+                      onClick={() => togglePublish(c)}
+                      style={{
+                        padding: '5px 12px', borderRadius: 20, border: 'none', cursor: 'pointer',
+                        fontSize: '0.78rem', fontWeight: 600,
+                        background: c.published ? 'rgba(74,222,128,0.15)' : 'rgba(248,113,113,0.15)',
+                        color: c.published ? 'var(--green)' : 'var(--red)',
+                      }}
+                    >
+                      <i className={`fas ${c.published ? 'fa-eye' : 'fa-eye-slash'}`} style={{ marginRight:5 }}></i>
+                      {c.published ? 'Publié' : 'Retiré'}
+                    </button>
                   </td>
                   <td>
                     <div className="actions">
