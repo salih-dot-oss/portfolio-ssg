@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#04BBFF"/>
+      <stop offset="50%"  stop-color="#0594D0"/>
+      <stop offset="100%" stop-color="#007198"/>
+    </linearGradient>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#0D1B2A"/>
+      <stop offset="100%" stop-color="#0A1520"/>
+    </linearGradient>
+  </defs>
+  <!-- Fond sombre arrondi -->
+  <rect width="64" height="64" rx="12" fill="url(#bg)"/>
+  <!-- Texte SSG. avec gradient -->
+  <text
+    x="32" y="44"
+    text-anchor="middle"
+    font-family="'Space Grotesk', 'Segoe UI', sans-serif"
+    font-size="26"
+    font-weight="700"
+    fill="url(#g)"
+    letter-spacing="-1"
+  >SSG.</text>
+</svg>
