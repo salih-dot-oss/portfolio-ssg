@@ -4,7 +4,6 @@ client/node_modules/
 
 # Build
 client/dist/
-public/
 
 # Variables d'environnement (ne jamais commiter !)
 .env
