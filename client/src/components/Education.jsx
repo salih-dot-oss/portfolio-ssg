@@ -19,7 +19,7 @@ const TIMELINE = [
   },
   {
     period: 'Licence 1 — 2024 · Présent',
-    degree: 'SIMAC — Sécurité Informatique & Mobilité dans les Applications et les Communications',
+    degree: 'SIMAC — Sciences Informatiques et Mathématiques de la Cybersécurité',
     school: 'Université Virtuelle du Sénégal (UVS)',
     icon: 'fa-user-shield',
     desc: 'Formation orientée sécurité des systèmes d\'information, réseaux et mobilité. Compréhension des vulnérabilités et des principes de défense.',

@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio Admin — SSG</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    :root {
+      --bg:     #070B14;
+      --bg2:    #0D1220;
+      --card:   #111827;
+      --card2:  #161F35;
+      --border: rgba(139,92,246,0.15);
+      --bh:     rgba(139,92,246,0.4);
+      --grad:   linear-gradient(135deg,#667EEA 0%,#9F7AEA 50%,#F093FB 100%);
+      --accent: #9F7AEA;
+      --g1: #667EEA; --g2: #9F7AEA; --g3: #F093FB;
+      --green: #4ADE80; --red: #F87171; --yellow: #FBBF24; --blue: #60A5FA;
+      --t1: #F0F6FC; --t2: #94A3B8; --t3: #64748B;
+      --ff-h: 'Space Grotesk',sans-serif;
+      --ff-b: 'Inter',sans-serif;
+      --r: 14px; --r-sm: 8px; --r-lg: 20px;
+      --tr: all 0.25s cubic-bezier(0.4,0,0.2,1);
+      --shadow: 0 8px 32px rgba(0,0,0,0.5);
+      --glow: 0 0 30px rgba(159,122,234,0.2);
+      --sidebar: 260px;
+    }
+    [data-theme="light"] {
+      --bg: #F1F5F9; --bg2: #E2E8F0; --card: #FFFFFF; --card2: #F8F5FF;
+      --t1: #0F172A; --t2: #475569; --t3: #94A3B8;
+      --shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 15px; }
+    body { background: var(--bg); color: var(--t1); font-family: var(--ff-b); overflow-x: hidden; transition: background 0.3s, color 0.3s; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+    input, textarea, select { font-family: var(--ff-b); }
+
+    /* ═══ GRADIENT TEXT ══════════════════════════════════ */
+    .gt { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    /* ═══ LOGIN PAGE ═════════════════════════════════════ */
+    #loginPage {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      background: var(--bg); position: relative; overflow: hidden;
+    }
+    .login-orb {
+      position: absolute; border-radius: 50%; pointer-events: none;
+    }
+    .login-orb-1 { width: 500px; height: 500px; top:-100px; left:-100px; background: radial-gradient(circle,rgba(102,126,234,0.15) 0%,transparent 70%); animation: float 10s ease-in-out infinite; }
+    .login-orb-2 { width: 400px; height: 400px; bottom:-80px; right:-80px; background: radial-gradient(circle,rgba(240,147,251,0.12) 0%,transparent 70%); animation: float 10s ease-in-out -5s infinite; }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-20px)} }
+    .login-box {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--r-lg); padding: 44px 40px;
+      width: 100%; max-width: 420px; position: relative; z-index: 1;
+      box-shadow: var(--shadow);
+    }
+    .login-logo { text-align: center; margin-bottom: 32px; }
+    .login-logo-text { font-family: var(--ff-h); font-size: 2.5rem; font-weight: 700; }
+    .login-logo-sub { font-size: 0.88rem; color: var(--t2); margin-top: 6px; }
+    .login-title { font-family: var(--ff-h); font-size: 1.4rem; font-weight: 700; margin-bottom: 6px; }
+    .login-sub { color: var(--t2); font-size: 0.88rem; margin-bottom: 28px; }
+    .field { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; }
+    .field label { font-size: 0.83rem; font-weight: 600; color: var(--t2); }
+    .field-input-wrap { position: relative; }
+    .field-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--t3); font-size: 0.95rem; pointer-events: none; }
+    .field input {
+      width: 100%; padding: 12px 14px 12px 42px;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--r-sm); color: var(--t1); font-size: 0.92rem;
+      outline: none; transition: var(--tr);
+    }
+    .field input:focus { border-color: var(--bh); box-shadow: 0 0 0 3px rgba(159,122,234,0.1); }
+    .field input::placeholder { color: var(--t3); }
+    .eye-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--t3); transition: var(--tr); }
+    .eye-btn:hover { color: var(--t1); }
+    .login-btn {
+      width: 100%; padding: 13px; border-radius: 50px;
+      background: var(--grad); color: #fff;
+      font-family: var(--ff-h); font-weight: 600; font-size: 0.95rem;
+      margin-top: 8px; transition: var(--tr);
+      box-shadow: 0 4px 20px rgba(159,122,234,0.35);
+    }
+    .login-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(159,122,234,0.5); }
+    .login-error {
+      background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.3);
+      color: var(--red); border-radius: var(--r-sm); padding: 10px 14px;
+      font-size: 0.85rem; margin-bottom: 16px; display: none;
+    }
+    .login-hint {
+      background: rgba(159,122,234,0.08); border: 1px solid var(--border);
+      border-radius: var(--r-sm); padding: 12px 16px;
+      font-size: 0.8rem; color: var(--t2); margin-top: 20px;
+    }
+    .login-hint strong { color: var(--accent); }
+
+    /* ═══ APP LAYOUT ═════════════════════════════════════ */
+    #app { display: none; min-height: 100vh; }
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ═══ SIDEBAR ════════════════════════════════════════ */
+    .sidebar {
+      width: var(--sidebar); background: var(--card);
+      border-right: 1px solid var(--border); display: flex; flex-direction: column;
+      position: fixed; top: 0; left: 0; height: 100vh; z-index: 100;
+      transition: transform 0.3s ease;
+    }
+    .sidebar-logo {
+      padding: 28px 24px; border-bottom: 1px solid var(--border);
+      font-family: var(--ff-h); font-size: 1.6rem; font-weight: 700;
+    }
+    .sidebar-menu { flex: 1; padding: 16px 12px; overflow-y: auto; }
+    .sidebar-section { font-size: 0.72rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--t3); padding: 8px 12px; margin-top: 8px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 11px 14px; border-radius: var(--r-sm);
+      color: var(--t2); font-size: 0.9rem; font-weight: 500;
+      transition: var(--tr); cursor: pointer; margin-bottom: 2px;
+    }
+    .nav-item:hover { background: var(--border); color: var(--t1); }
+    .nav-item.active { background: rgba(159,122,234,0.15); color: var(--accent); }
+    .nav-item .badge { margin-left: auto; background: var(--red); color: #fff; border-radius: 50px; font-size: 0.68rem; padding: 2px 7px; font-weight: 700; }
+    .sidebar-footer { padding: 16px 12px; border-top: 1px solid var(--border); }
+    .user-card { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: var(--r-sm); background: var(--bg2); }
+    .user-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--grad); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem; color: #fff; flex-shrink: 0; }
+    .user-info { flex: 1; overflow: hidden; }
+    .user-name { font-size: 0.88rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .user-role { font-size: 0.75rem; color: var(--t3); }
+    .logout-btn { color: var(--t3); transition: var(--tr); padding: 4px; }
+    .logout-btn:hover { color: var(--red); }
+
+    /* ═══ MAIN CONTENT ═══════════════════════════════════ */
+    .main { flex: 1; margin-left: var(--sidebar); display: flex; flex-direction: column; min-height: 100vh; }
+    .topbar {
+      height: 60px; background: var(--card); border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 28px; position: sticky; top: 0; z-index: 50;
+    }
+    .topbar-title { font-family: var(--ff-h); font-size: 1.15rem; font-weight: 700; }
+    .topbar-right { display: flex; align-items: center; gap: 12px; }
+    .icon-btn {
+      width: 38px; height: 38px; border-radius: var(--r-sm);
+      background: var(--bg2); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--t2); transition: var(--tr); font-size: 0.95rem;
+    }
+    .icon-btn:hover { color: var(--t1); border-color: var(--bh); }
+    .mobile-menu-btn { display: none; }
+    .content { flex: 1; padding: 28px; }
+
+    /* ═══ PAGES ══════════════════════════════════════════ */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ═══ DASHBOARD ══════════════════════════════════════ */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(200px,1fr)); gap: 16px; margin-bottom: 32px; }
+    .stat-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--r);
+      padding: 24px; transition: var(--tr);
+    }
+    .stat-card:hover { border-color: var(--bh); transform: translateY(-2px); }
+    .stat-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .stat-icon { width: 44px; height: 44px; border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+    .stat-num { font-family: var(--ff-h); font-size: 2.2rem; font-weight: 700; }
+    .stat-label { font-size: 0.82rem; color: var(--t2); }
+    .welcome-card {
+      background: var(--card2); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 28px; margin-bottom: 28px;
+      display: flex; align-items: center; gap: 20px;
+    }
+    .welcome-emoji { font-size: 3rem; }
+    .welcome-title { font-family: var(--ff-h); font-size: 1.25rem; font-weight: 700; margin-bottom: 4px; }
+    .welcome-sub { color: var(--t2); font-size: 0.9rem; }
+
+    /* ═══ CARDS / TABLES ═════════════════════════════════ */
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--r);
+      overflow: hidden; margin-bottom: 20px;
+    }
+    .card-header {
+      padding: 18px 24px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    }
+    .card-title { font-family: var(--ff-h); font-size: 1.05rem; font-weight: 700; }
+    .card-body { padding: 0; }
+    table { width: 100%; border-collapse: collapse; }
+    th { padding: 12px 20px; text-align: left; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--t3); background: var(--bg2); border-bottom: 1px solid var(--border); }
+    td { padding: 14px 20px; font-size: 0.88rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--card2); }
+    .td-img { width: 52px; height: 42px; object-fit: cover; border-radius: 6px; background: var(--bg2); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; overflow: hidden; }
+    .td-img img { width: 100%; height: 100%; object-fit: cover; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 4px 10px; border-radius: 50px; font-size: 0.75rem; font-weight: 700;
+    }
+    .badge-gl   { background: rgba(102,126,234,0.15); color: var(--g1); border: 1px solid rgba(102,126,234,0.3); }
+    .badge-cy   { background: rgba(240,147,251,0.1);  color: var(--g3); border: 1px solid rgba(240,147,251,0.3); }
+    .badge-feat { background: rgba(251,191,36,0.1);   color: var(--yellow); border: 1px solid rgba(251,191,36,0.3); }
+    .actions { display: flex; gap: 6px; }
+    .action-btn {
+      width: 32px; height: 32px; border-radius: var(--r-sm);
+      background: var(--bg2); display: flex; align-items: center;
+      justify-content: center; font-size: 0.85rem; color: var(--t2);
+      transition: var(--tr); border: 1px solid var(--border);
+    }
+    .action-btn.edit:hover  { color: var(--blue); border-color: var(--blue); }
+    .action-btn.del:hover   { color: var(--red);  border-color: var(--red);  }
+    .action-btn.view:hover  { color: var(--green); border-color: var(--green); }
+
+    /* ═══ BUTTONS ════════════════════════════════════════ */
+    .btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 9px 20px; border-radius: 50px;
+      font-family: var(--ff-h); font-weight: 600; font-size: 0.875rem;
+      transition: var(--tr); cursor: pointer;
+    }
+    .btn-primary { background: var(--grad); color: #fff; box-shadow: 0 3px 12px rgba(159,122,234,0.3); }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(159,122,234,0.45); }
+    .btn-ghost { background: var(--bg2); color: var(--t1); border: 1px solid var(--border); }
+    .btn-ghost:hover { border-color: var(--bh); background: var(--card2); }
+    .btn-danger { background: rgba(248,113,113,0.1); color: var(--red); border: 1px solid rgba(248,113,113,0.3); }
+    .btn-danger:hover { background: var(--red); color: #fff; }
+    .btn-sm { padding: 6px 14px; font-size: 0.8rem; }
+
+    /* ═══ MODAL ══════════════════════════════════════════ */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(6px); z-index: 1000;
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px; opacity: 0; pointer-events: none; transition: opacity 0.25s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--r-lg); width: 100%; max-width: 600px;
+      max-height: 90vh; overflow-y: auto;
+      transform: translateY(20px); transition: transform 0.25s;
+    }
+    .modal-overlay.open .modal { transform: none; }
+    .modal-header { padding: 24px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .modal-title { font-family: var(--ff-h); font-size: 1.15rem; font-weight: 700; }
+    .modal-close { width: 32px; height: 32px; border-radius: 50%; background: var(--bg2); display: flex; align-items: center; justify-content: center; color: var(--t2); transition: var(--tr); }
+    .modal-close:hover { color: var(--red); background: rgba(248,113,113,0.1); }
+    .modal-body { padding: 24px 28px; }
+    .modal-footer { padding: 16px 28px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 12px; }
+    .form-group { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; }
+    .form-label { font-size: 0.82rem; font-weight: 600; color: var(--t2); }
+    .form-input, .form-textarea, .form-select {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r-sm);
+      padding: 10px 14px; color: var(--t1); font-size: 0.9rem; outline: none; transition: var(--tr); width: 100%;
+    }
+    .form-input:focus, .form-textarea:focus, .form-select:focus { border-color: var(--bh); box-shadow: 0 0 0 3px rgba(159,122,234,0.1); }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--t3); }
+    .form-textarea { resize: vertical; min-height: 90px; }
+    .form-hint { font-size: 0.77rem; color: var(--t3); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .upload-area {
+      border: 2px dashed var(--border); border-radius: var(--r);
+      padding: 28px; text-align: center; cursor: pointer; transition: var(--tr);
+    }
+    .upload-area:hover, .upload-area.dragover { border-color: var(--bh); background: rgba(159,122,234,0.05); }
+    .upload-area i { font-size: 2rem; color: var(--t3); display: block; margin-bottom: 8px; }
+    .upload-area p { font-size: 0.85rem; color: var(--t2); }
+    .upload-area span { color: var(--accent); font-weight: 600; }
+    .upload-preview { position: relative; display: inline-block; }
+    .upload-preview img { max-width: 200px; max-height: 120px; border-radius: var(--r-sm); object-fit: cover; }
+    .upload-preview .remove-btn { position: absolute; top:-8px; right:-8px; width:24px; height:24px; border-radius:50%; background:var(--red); color:#fff; font-size:0.7rem; display:flex; align-items:center; justify-content:center; }
+
+    /* ═══ MESSAGES ═══════════════════════════════════════ */
+    .msg-row { cursor: pointer; }
+    .msg-row.unread td { font-weight: 600; }
+    .msg-row.unread td:first-child::before { content: ''; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-right: 8px; vertical-align: middle; }
+
+    /* ═══ TOAST ══════════════════════════════════════════ */
+    #toast {
+      position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 14px 20px;
+      box-shadow: var(--shadow); display: flex; align-items: center; gap: 10px;
+      font-size: 0.88rem; font-weight: 500;
+      transform: translateY(20px); opacity: 0;
+      transition: all 0.3s ease; pointer-events: none;
+    }
+    #toast.show { transform: none; opacity: 1; }
+    #toast.success { border-left: 3px solid var(--green); }
+    #toast.error   { border-left: 3px solid var(--red); }
+    #toast.info    { border-left: 3px solid var(--accent); }
+
+    /* ═══ EMPTY STATE ════════════════════════════════════ */
+    .empty-state { padding: 60px 24px; text-align: center; color: var(--t3); }
+    .empty-state i { font-size: 2.5rem; margin-bottom: 12px; display: block; }
+    .empty-state p { font-size: 0.9rem; }
+
+    /* ═══ SETTINGS ═══════════════════════════════════════ */
+    .settings-section { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 24px; margin-bottom: 20px; }
+    .settings-section h3 { font-family: var(--ff-h); font-size: 1rem; font-weight: 700; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .cred-info { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 16px; font-size: 0.85rem; }
+    .cred-info .cred-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .cred-info .cred-row:last-child { margin-bottom: 0; }
+    .cred-info .cred-label { color: var(--t3); min-width: 80px; font-size: 0.8rem; }
+    .cred-info .cred-value { color: var(--t1); font-weight: 600; font-family: monospace; }
+
+    /* ═══ RESPONSIVE ═════════════════════════════════════ */
+    @media (max-width: 900px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: none; box-shadow: var(--shadow); }
+      .main { margin-left: 0; }
+      .mobile-menu-btn { display: flex; }
+      .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; }
+      .sidebar-overlay.show { display: block; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 500px) {
+      .content { padding: 16px; }
+      .modal-body, .modal-header { padding: 20px; }
+      .modal-footer { padding: 14px 20px; }
+      .stats-grid { grid-template-columns: 1fr; }
+      table { font-size: 0.82rem; }
+      td, th { padding: 10px 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════ LOGIN PAGE ═══════════ -->
+<div id="loginPage">
+  <div class="login-orb login-orb-1"></div>
+  <div class="login-orb login-orb-2"></div>
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-text gt">SSG.</div>
+      <div class="login-logo-sub">Espace Administration</div>
+    </div>
+    <h2 class="login-title">Connexion</h2>
+    <p class="login-sub">Accédez à votre tableau de bord</p>
+    <div class="login-error" id="loginError"></div>
+    <form id="loginForm">
+      <div class="field">
+        <label>Numéro de téléphone</label>
+        <div class="field-input-wrap">
+          <i class="fas fa-phone field-icon"></i>
+          <input type="tel" id="loginPhone" placeholder="77 746 27 82" autocomplete="tel" required />
+        </div>
+      </div>
+      <div class="field">
+        <label>Mot de passe</label>
+        <div class="field-input-wrap">
+          <i class="fas fa-lock field-icon"></i>
+          <input type="password" id="loginPass" placeholder="Votre mot de passe" autocomplete="current-password" required />
+          <button type="button" class="eye-btn" id="eyeBtn"><i class="fas fa-eye"></i></button>
+        </div>
+      </div>
+      <button type="submit" class="login-btn" id="loginBtn">
+        <span id="loginBtnText"><i class="fas fa-sign-in-alt"></i> &nbsp;Connexion</span>
+      </button>
+    </form>
+    <div class="login-hint">
+      <strong>Identifiants :</strong><br>
+      Téléphone : <strong>77 746 27 82</strong> ou <strong>76 181 15 74</strong><br>
+      Mot de passe : <strong>Votre adresse email</strong>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ APP ═══════════ -->
+<div id="app">
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <div class="layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo gt">SSG.</div>
+      <nav class="sidebar-menu">
+        <div class="sidebar-section">Principal</div>
+        <div class="nav-item active" data-page="dashboard">
+          <i class="fas fa-chart-pie"></i> Tableau de bord
+        </div>
+        <div class="sidebar-section">Contenu</div>
+        <div class="nav-item" data-page="projects">
+          <i class="fas fa-laptop-code"></i> Projets
+        </div>
+        <div class="nav-item" data-page="certificates">
+          <i class="fas fa-certificate"></i> Certifications
+        </div>
+        <div class="nav-item" data-page="messages">
+          <i class="fas fa-envelope"></i> Messages
+          <span class="badge" id="unreadBadge" style="display:none"></span>
+        </div>
+        <div class="sidebar-section">Compte</div>
+        <div class="nav-item" data-page="settings">
+          <i class="fas fa-cog"></i> Paramètres
+        </div>
+        <div class="nav-item" id="viewPortfolioLink" onclick="window.open('/','_blank')">
+          <i class="fas fa-external-link-alt"></i> Voir le portfolio
+        </div>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-card">
+          <div class="user-avatar" id="sidebarInitial">S</div>
+          <div class="user-info">
+            <div class="user-name" id="sidebarName">Serigne Saliou</div>
+            <div class="user-role">Administrateur</div>
+          </div>
+          <button class="logout-btn" id="logoutBtn" title="Se déconnecter"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main">
+      <header class="topbar">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <button class="icon-btn mobile-menu-btn" id="menuBtn"><i class="fas fa-bars"></i></button>
+          <h1 class="topbar-title" id="pageTitle">Tableau de bord</h1>
+        </div>
+        <div class="topbar-right">
+          <button class="icon-btn" id="themeBtn" title="Changer thème">
+            <i class="fas fa-moon" id="themeIcon"></i>
+          </button>
+          <a href="/" target="_blank" class="icon-btn" title="Voir le portfolio">
+            <i class="fas fa-external-link-alt"></i>
+          </a>
+        </div>
+      </header>
+
+      <main class="content">
+
+        <!-- ─── DASHBOARD ─────────────────────────── -->
+        <div class="page active" id="page-dashboard">
+          <div class="welcome-card">
+            <div class="welcome-emoji">👋</div>
+            <div>
+              <div class="welcome-title">Bonjour, <span class="gt" id="welcomeName">Serigne Saliou</span> !</div>
+              <div class="welcome-sub">Gérez votre portfolio depuis cet espace. Ajoutez vos projets, certificats et consultez vos messages.</div>
+            </div>
+          </div>
+          <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+              <div class="stat-top"><div class="stat-icon" style="background:rgba(102,126,234,0.15)">💻</div></div>
+              <div class="stat-num gt" id="stat-projects">—</div>
+              <div class="stat-label">Projets</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-top"><div class="stat-icon" style="background:rgba(240,147,251,0.1)">📜</div></div>
+              <div class="stat-num gt" id="stat-certs">—</div>
+              <div class="stat-label">Certifications</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-top"><div class="stat-icon" style="background:rgba(96,165,250,0.1)">✉️</div></div>
+              <div class="stat-num gt" id="stat-msgs">—</div>
+              <div class="stat-label">Messages</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-top"><div class="stat-icon" style="background:rgba(248,113,113,0.1)">🔔</div></div>
+              <div class="stat-num gt" id="stat-unread">—</div>
+              <div class="stat-label">Non lus</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">🚀 Démarrage rapide</span>
+            </div>
+            <div style="padding:24px; display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px;">
+              <button class="btn btn-primary" onclick="navigate('projects')"><i class="fas fa-plus"></i> Ajouter un projet</button>
+              <button class="btn btn-ghost" onclick="navigate('certificates')"><i class="fas fa-plus"></i> Ajouter un certificat</button>
+              <button class="btn btn-ghost" onclick="navigate('messages')"><i class="fas fa-envelope-open"></i> Voir les messages</button>
+              <a href="/" target="_blank" class="btn btn-ghost"><i class="fas fa-eye"></i> Voir le portfolio</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ─── PROJETS ───────────────────────────── -->
+        <div class="page" id="page-projects">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">💻 Mes projets</span>
+              <button class="btn btn-primary btn-sm" onclick="openProjectModal()"><i class="fas fa-plus"></i> Nouveau projet</button>
+            </div>
+            <div class="card-body">
+              <table>
+                <thead>
+                  <tr><th>Projet</th><th>Technologies</th><th>Liens</th><th>Actions</th></tr>
+                </thead>
+                <tbody id="projectsTableBody">
+                  <tr><td colspan="4"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i><p>Chargement…</p></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ─── CERTIFICATS ───────────────────────── -->
+        <div class="page" id="page-certificates">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">📜 Mes certifications</span>
+              <button class="btn btn-primary btn-sm" onclick="openCertModal()"><i class="fas fa-plus"></i> Nouveau certificat</button>
+            </div>
+            <div class="card-body">
+              <table>
+                <thead>
+                  <tr><th>Certification</th><th>Organisme</th><th>Date</th><th>Catégorie</th><th>Fichier</th><th>Actions</th></tr>
+                </thead>
+                <tbody id="certsTableBody">
+                  <tr><td colspan="6"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i><p>Chargement…</p></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ─── MESSAGES ──────────────────────────── -->
+        <div class="page" id="page-messages">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">✉️ Messages reçus</span>
+              <button class="btn btn-ghost btn-sm" onclick="loadMessages()"><i class="fas fa-sync"></i> Actualiser</button>
+            </div>
+            <div class="card-body">
+              <table>
+                <thead><tr><th>Expéditeur</th><th>Objet</th><th>Date</th><th>Actions</th></tr></thead>
+                <tbody id="msgsTableBody">
+                  <tr><td colspan="4"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i><p>Chargement…</p></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ─── PARAMÈTRES ────────────────────────── -->
+        <div class="page" id="page-settings">
+          <div class="settings-section">
+            <h3><i class="fas fa-user-circle" style="color:var(--accent);margin-right:8px;"></i> Informations du compte</h3>
+            <div class="cred-info">
+              <div class="cred-row"><span class="cred-label">Nom</span><span class="cred-value">Serigne Saliou GNINGUE</span></div>
+              <div class="cred-row"><span class="cred-label">Téléphone</span><span class="cred-value">+221 77 746 27 82  /  +221 76 181 15 74</span></div>
+            </div>
+          </div>
+          <div class="settings-section">
+            <h3><i class="fas fa-lock" style="color:var(--accent);margin-right:8px;"></i> Changer le mot de passe</h3>
+            <form id="changePassForm" style="max-width:440px;">
+              <div class="form-group">
+                <label class="form-label">Mot de passe actuel</label>
+                <input type="password" class="form-input" id="currPass" placeholder="Mot de passe actuel" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Nouveau mot de passe</label>
+                <input type="password" class="form-input" id="newPass" placeholder="Nouveau mot de passe" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Confirmer</label>
+                <input type="password" class="form-input" id="confPass" placeholder="Confirmer le mot de passe" />
+              </div>
+              <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Mettre à jour</button>
+            </form>
+          </div>
+          <div class="settings-section">
+            <h3><i class="fas fa-palette" style="color:var(--accent);margin-right:8px;"></i> Thème</h3>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;">
+              <button class="btn btn-ghost" onclick="setTheme(true)"><i class="fas fa-moon"></i> Mode sombre</button>
+              <button class="btn btn-ghost" onclick="setTheme(false)"><i class="fas fa-sun"></i> Mode clair</button>
+            </div>
+          </div>
+          <div class="settings-section">
+            <h3><i class="fas fa-info-circle" style="color:var(--accent);margin-right:8px;"></i> À propos</h3>
+            <p style="color:var(--t2);font-size:0.88rem;">Portfolio Admin v1.0 — Serigne Saliou GNINGUE &copy; 2024<br>Génie Logiciel (ESP) &amp; Cybersécurité (UVS)</p>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MODAL PROJET ═══════════ -->
+<div class="modal-overlay" id="projectModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="projectModalTitle">Nouveau projet</span>
+      <button class="modal-close" onclick="closeModal('projectModal')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="projectId" />
+      <div class="form-group">
+        <label class="form-label">Titre du projet <span style="color:var(--red)">*</span></label>
+        <input type="text" class="form-input" id="projectTitle" placeholder="Ex : Application de gestion des étudiants" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea class="form-textarea" id="projectDesc" placeholder="Décrivez votre projet en 2-3 phrases…"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Technologies <span class="form-hint">(séparées par des virgules)</span></label>
+        <input type="text" class="form-input" id="projectTechs" placeholder="Python, Django, MySQL, React…" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Lien GitHub</label>
+          <input type="url" class="form-input" id="projectGithub" placeholder="https://github.com/…" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Lien Live / Demo</label>
+          <input type="url" class="form-input" id="projectLive" placeholder="https://…" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Ordre d'affichage</label>
+          <input type="number" class="form-input" id="projectOrder" placeholder="0" min="0" />
+        </div>
+        <div class="form-group" style="justify-content:flex-end; padding-bottom:2px;">
+          <label class="form-label">Mettre en avant</label>
+          <label style="display:flex;align-items:center;gap:8px;margin-top:10px;cursor:pointer;">
+            <input type="checkbox" id="projectFeatured" style="width:18px;height:18px;accent-color:var(--accent);" />
+            <span style="font-size:0.85rem;color:var(--t2);">Projet phare ⭐</span>
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Image du projet</label>
+        <div id="projectImgArea" class="upload-area" onclick="document.getElementById('projectImgFile').click()">
+          <input type="file" id="projectImgFile" accept="image/*" style="display:none" onchange="previewImage(this,'projectImgPreview','projectImgArea')" />
+          <i class="fas fa-image"></i>
+          <p>Cliquez ou <span>glissez une image</span> ici (JPG, PNG, WebP)</p>
+        </div>
+        <div id="projectImgPreview" style="margin-top:10px;display:none;"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('projectModal')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveProject()"><i class="fas fa-save"></i> Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MODAL CERTIFICAT ═══════════ -->
+<div class="modal-overlay" id="certModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="certModalTitle">Nouveau certificat</span>
+      <button class="modal-close" onclick="closeModal('certModal')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="certId" />
+      <div class="form-group">
+        <label class="form-label">Nom du certificat <span style="color:var(--red)">*</span></label>
+        <input type="text" class="form-input" id="certName" placeholder="Ex : CS50's Introduction to Python" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Organisme <span style="color:var(--red)">*</span></label>
+          <input type="text" class="form-input" id="certIssuer" placeholder="Harvard, Cisco, Huawei…" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Date d'obtention</label>
+          <input type="text" class="form-input" id="certDate" placeholder="2024" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Catégorie</label>
+          <select class="form-select" id="certCat">
+            <option value="Génie Logiciel">Génie Logiciel</option>
+            <option value="Cybersécurité">Cybersécurité</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Lien de vérification</label>
+          <input type="url" class="form-input" id="certVerify" placeholder="https://…" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Fichier du certificat <span class="form-hint">(PDF ou image)</span></label>
+        <div id="certFileArea" class="upload-area" onclick="document.getElementById('certFileInput').click()">
+          <input type="file" id="certFileInput" accept="image/*,.pdf" style="display:none" onchange="previewFile(this,'certFilePreview','certFileArea')" />
+          <i class="fas fa-file-certificate"></i>
+          <p>Cliquez pour uploader votre <span>certificat (PDF / image)</span></p>
+        </div>
+        <div id="certFilePreview" style="margin-top:10px;"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('certModal')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveCert()"><i class="fas fa-save"></i> Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MODAL MESSAGE ═══════════ -->
+<div class="modal-overlay" id="msgModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Message reçu</span>
+      <button class="modal-close" onclick="closeModal('msgModal')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body" id="msgModalBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('msgModal')">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- ═══════════════════════ SCRIPT ═══════════════════════ -->
+<script>
+  const API = '/api';
+  let token = localStorage.getItem('ssg_token') || '';
+  let allMessages = [], allProjects = [], allCerts = [];
+
+  /* ─── Theme ──────────────────────────────────────────── */
+  let isDark = localStorage.getItem('ssg_theme') !== 'light';
+  function setTheme(dark) {
+    isDark = dark;
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    const icon = document.getElementById('themeIcon');
+    if (icon) icon.className = dark ? 'fas fa-moon' : 'fas fa-sun';
+    localStorage.setItem('ssg_theme', dark ? 'dark' : 'light');
+  }
+  setTheme(isDark);
+  document.getElementById('themeBtn').addEventListener('click', () => setTheme(!isDark));
+
+  /* ─── Toast ──────────────────────────────────────────── */
+  function toast(msg, type='success') {
+    const el = document.getElementById('toast');
+    const icons = { success:'✅', error:'❌', info:'ℹ️' };
+    el.innerHTML = `<span>${icons[type]||'ℹ️'}</span> ${msg}`;
+    el.className = `show ${type}`;
+    setTimeout(() => el.className = '', 3500);
+  }
+
+  /* ─── API Helper ─────────────────────────────────────── */
+  async function api(method, path, data=null, isForm=false) {
+    const opts = {
+      method, headers: { Authorization: `Bearer ${token}` }
+    };
+    if (data) {
+      if (isForm) opts.body = data;
+      else { opts.headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(data); }
+    }
+    let res;
+    try { res = await fetch(API + path, opts); }
+    catch { throw new Error('Impossible de contacter le serveur. Assurez-vous que le backend est démarré.'); }
+    const text = await res.text();
+    let json = {};
+    if (text) {
+      try { json = JSON.parse(text); }
+      catch { if (!res.ok) throw new Error('Erreur serveur (' + res.status + ')'); throw new Error('Réponse inattendue'); }
+    } else if (!res.ok) {
+      throw new Error('Erreur serveur (' + res.status + ') — réponse vide');
+    }
+    if (!res.ok) throw new Error(json.error || 'Erreur API');
+    return json;
+  }
+
+  /* ─── Auth ───────────────────────────────────────────── */
+  document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('loginBtn');
+    const err = document.getElementById('loginError');
+    err.style.display = 'none';
+    btn.disabled = true;
+    btn.textContent = 'Connexion…';
+    try {
+      let r;
+      try {
+        r = await fetch(API + '/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone: document.getElementById('loginPhone').value, password: document.getElementById('loginPass').value })
+        });
+      } catch {
+        throw new Error('Impossible de contacter le serveur. Assurez-vous que le backend est démarré (npm start).');
+      }
+      const text = await r.text();
+      let data = {};
+      if (text) {
+        try { data = JSON.parse(text); } catch { throw new Error('Réponse inattendue du serveur'); }
+      } else {
+        throw new Error('Erreur serveur (' + r.status + ') — réponse vide');
+      }
+      if (!r.ok) throw new Error(data.error || 'Erreur ' + r.status);
+      token = data.token;
+      localStorage.setItem('ssg_token', token);
+      initApp(data.name);
+    } catch(ex) {
+      err.textContent = ex.message; err.style.display = 'block';
+      btn.disabled = false; btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> &nbsp;Connexion';
+    }
+  });
+
+  // Show/hide password
+  document.getElementById('eyeBtn').addEventListener('click', function() {
+    const inp = document.getElementById('loginPass');
+    const isText = inp.type === 'text';
+    inp.type = isText ? 'password' : 'text';
+    this.innerHTML = `<i class="fas fa-eye${isText ? '' : '-slash'}"></i>`;
+  });
+
+  // Auto-login if token exists
+  if (token) {
+    fetch(API + '/auth/verify', { headers: { Authorization: `Bearer ${token}` } })
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(d => initApp(d.user?.name || 'Admin'))
+      .catch(() => { token = ''; localStorage.removeItem('ssg_token'); });
+  }
+
+  function initApp(name) {
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    document.getElementById('sidebarName').textContent = name || 'Admin';
+    document.getElementById('welcomeName').textContent  = name || 'Admin';
+    document.getElementById('sidebarInitial').textContent = (name||'A')[0].toUpperCase();
+    loadStats();
+    loadProjects();
+    loadCerts();
+    loadMessages();
+  }
+
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    token = ''; localStorage.removeItem('ssg_token');
+    document.getElementById('app').style.display       = 'none';
+    document.getElementById('loginPage').style.display = 'flex';
+  });
+
+  /* ─── Navigation ─────────────────────────────────────── */
+  const pageTitles = { dashboard:'Tableau de bord', projects:'Projets', certificates:'Certifications', messages:'Messages', settings:'Paramètres' };
+  function navigate(page) {
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    document.querySelector(`[data-page="${page}"]`)?.classList.add('active');
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(`page-${page}`)?.classList.add('active');
+    document.getElementById('pageTitle').textContent = pageTitles[page] || '';
+    closeSidebar();
+  }
+  document.querySelectorAll('.nav-item[data-page]').forEach(item => {
+    item.addEventListener('click', () => navigate(item.dataset.page));
+  });
+
+  /* ─── Mobile Sidebar ─────────────────────────────────── */
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  document.getElementById('menuBtn').addEventListener('click', () => { sidebar.classList.add('open'); overlay.classList.add('show'); });
+  overlay.addEventListener('click', closeSidebar);
+  function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); }
+
+  /* ─── Stats ──────────────────────────────────────────── */
+  async function loadStats() {
+    try {
+      const s = await api('GET', '/admin/stats');
+      document.getElementById('stat-projects').textContent = s.projects;
+      document.getElementById('stat-certs').textContent    = s.certificates;
+      document.getElementById('stat-msgs').textContent     = s.messages;
+      document.getElementById('stat-unread').textContent   = s.unread;
+      const badge = document.getElementById('unreadBadge');
+      badge.textContent    = s.unread;
+      badge.style.display  = s.unread > 0 ? '' : 'none';
+    } catch {}
+  }
+
+  /* ─── Projects ───────────────────────────────────────── */
+  async function loadProjects() {
+    const tb = document.getElementById('projectsTableBody');
+    try {
+      allProjects = await api('GET', '/projects');
+      if (!allProjects.length) {
+        tb.innerHTML = `<tr><td colspan="4"><div class="empty-state"><i class="fas fa-folder-open"></i><p>Aucun projet. Créez votre premier projet !</p></div></td></tr>`;
+        return;
+      }
+      tb.innerHTML = allProjects.map(p => `
+        <tr>
+          <td>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div class="td-img">
+                ${p.image_url ? `<img src="${p.image_url}" alt="" />` : '<i class="fas fa-code"></i>'}
+              </div>
+              <div>
+                <div style="font-weight:600;font-size:0.9rem;">${p.title}</div>
+                <div style="font-size:0.78rem;color:var(--t3);">${p.featured ? '⭐ Projet phare' : ''}</div>
+              </div>
+            </div>
+          </td>
+          <td><div style="display:flex;flex-wrap:wrap;gap:4px;">${(p.technologies||'').split(',').filter(Boolean).map(t=>`<span style="background:rgba(159,122,234,0.1);border:1px solid rgba(159,122,234,0.25);padding:2px 8px;border-radius:4px;font-size:0.73rem;color:var(--accent);">${t.trim()}</span>`).join('')}</div></td>
+          <td>
+            ${p.github_url ? `<a href="${p.github_url}" target="_blank" style="color:var(--accent);font-size:0.82rem;display:block;"><i class="fab fa-github"></i> GitHub</a>` : ''}
+            ${p.live_url   ? `<a href="${p.live_url}"   target="_blank" style="color:var(--blue);font-size:0.82rem;display:block;"><i class="fas fa-external-link-alt"></i> Live</a>` : ''}
+          </td>
+          <td><div class="actions">
+            <button class="action-btn edit" onclick="editProject(${p.id})" title="Modifier"><i class="fas fa-pen"></i></button>
+            <button class="action-btn del"  onclick="deleteProject(${p.id})" title="Supprimer"><i class="fas fa-trash"></i></button>
+          </div></td>
+        </tr>
+      `).join('');
+    } catch(e) { tb.innerHTML = `<tr><td colspan="4" style="color:var(--red);text-align:center;padding:20px;">${e.message}</td></tr>`; }
+  }
+
+  let currentProjectImg = null;
+  function openProjectModal(data=null) {
+    currentProjectImg = null;
+    document.getElementById('projectId').value     = data?.id    || '';
+    document.getElementById('projectTitle').value  = data?.title || '';
+    document.getElementById('projectDesc').value   = data?.description || '';
+    document.getElementById('projectTechs').value  = data?.technologies || '';
+    document.getElementById('projectGithub').value = data?.github_url || '';
+    document.getElementById('projectLive').value   = data?.live_url || '';
+    document.getElementById('projectOrder').value  = data?.order_num || 0;
+    document.getElementById('projectFeatured').checked = !!data?.featured;
+    document.getElementById('projectImgFile').value = '';
+    const prev = document.getElementById('projectImgPreview');
+    prev.style.display = 'none'; prev.innerHTML = '';
+    if (data?.image_url) {
+      prev.style.display = 'block';
+      prev.innerHTML = `<div class="upload-preview"><img src="${data.image_url}" alt="" /></div>`;
+    }
+    document.getElementById('projectModalTitle').textContent = data ? 'Modifier le projet' : 'Nouveau projet';
+    openModal('projectModal');
+  }
+
+  function editProject(id) {
+    const p = allProjects.find(x => x.id === id);
+    if (p) openProjectModal(p);
+  }
+
+  async function saveProject() {
+    const id    = document.getElementById('projectId').value;
+    const title = document.getElementById('projectTitle').value.trim();
+    if (!title) { toast('Le titre est obligatoire', 'error'); return; }
+    const fd = new FormData();
+    fd.append('title',       title);
+    fd.append('description', document.getElementById('projectDesc').value);
+    fd.append('technologies',document.getElementById('projectTechs').value);
+    fd.append('github_url',  document.getElementById('projectGithub').value);
+    fd.append('live_url',    document.getElementById('projectLive').value);
+    fd.append('order_num',   document.getElementById('projectOrder').value);
+    fd.append('featured',    document.getElementById('projectFeatured').checked ? '1' : '0');
+    const imgFile = document.getElementById('projectImgFile').files[0];
+    if (imgFile) fd.append('image', imgFile);
+    try {
+      const method = id ? 'PUT' : 'POST';
+      const path   = id ? `/projects/${id}` : '/projects';
+      await api(method, path, fd, true);
+      toast(id ? 'Projet mis à jour !' : 'Projet créé !');
+      closeModal('projectModal');
+      loadProjects(); loadStats();
+    } catch(e) { toast(e.message, 'error'); }
+  }
+
+  async function deleteProject(id) {
+    if (!confirm('Supprimer ce projet définitivement ?')) return;
+    try { await api('DELETE', `/projects/${id}`); toast('Projet supprimé'); loadProjects(); loadStats(); }
+    catch(e) { toast(e.message, 'error'); }
+  }
+
+  /* ─── Certificates ───────────────────────────────────── */
+  async function loadCerts() {
+    const tb = document.getElementById('certsTableBody');
+    try {
+      allCerts = await api('GET', '/certificates');
+      if (!allCerts.length) {
+        tb.innerHTML = `<tr><td colspan="6"><div class="empty-state"><i class="fas fa-certificate"></i><p>Aucun certificat. Ajoutez votre premier !</p></div></td></tr>`;
+        return;
+      }
+      tb.innerHTML = allCerts.map(c => `
+        <tr>
+          <td style="font-weight:600;font-size:0.88rem;">${c.name}</td>
+          <td style="color:var(--t2);font-size:0.85rem;">${c.issuer}</td>
+          <td style="font-size:0.82rem;color:var(--t3);">${c.issue_date || '—'}</td>
+          <td><span class="badge ${c.category === 'Cybersécurité' ? 'badge-cy' : 'badge-gl'}">${c.category}</span></td>
+          <td>
+            ${c.file_url   ? `<a href="${c.file_url}" target="_blank" style="color:var(--green);font-size:0.82rem;"><i class="fas fa-file-alt"></i> Voir</a>` : '<span style="color:var(--t3);font-size:0.82rem;">—</span>'}
+          </td>
+          <td><div class="actions">
+            <button class="action-btn edit" onclick="editCert(${c.id})" title="Modifier"><i class="fas fa-pen"></i></button>
+            <button class="action-btn del"  onclick="deleteCert(${c.id})" title="Supprimer"><i class="fas fa-trash"></i></button>
+            ${c.verify_url ? `<a href="${c.verify_url}" target="_blank" class="action-btn view" title="Vérifier"><i class="fas fa-external-link-alt"></i></a>` : ''}
+          </div></td>
+        </tr>
+      `).join('');
+    } catch(e) { tb.innerHTML = `<tr><td colspan="6" style="color:var(--red);text-align:center;padding:20px;">${e.message}</td></tr>`; }
+  }
+
+  function openCertModal(data=null) {
+    document.getElementById('certId').value     = data?.id       || '';
+    document.getElementById('certName').value   = data?.name     || '';
+    document.getElementById('certIssuer').value = data?.issuer   || '';
+    document.getElementById('certDate').value   = data?.issue_date || '';
+    document.getElementById('certCat').value    = data?.category || 'Génie Logiciel';
+    document.getElementById('certVerify').value = data?.verify_url || '';
+    document.getElementById('certFileInput').value = '';
+    const prev = document.getElementById('certFilePreview');
+    prev.innerHTML = data?.file_url ? `<a href="${data.file_url}" target="_blank" style="color:var(--accent);font-size:0.83rem;"><i class="fas fa-file-alt"></i> Fichier actuel</a>` : '';
+    document.getElementById('certModalTitle').textContent = data ? 'Modifier le certificat' : 'Nouveau certificat';
+    openModal('certModal');
+  }
+
+  function editCert(id) {
+    const c = allCerts.find(x => x.id === id);
+    if (c) openCertModal(c);
+  }
+
+  async function saveCert() {
+    const id     = document.getElementById('certId').value;
+    const name   = document.getElementById('certName').value.trim();
+    const issuer = document.getElementById('certIssuer').value.trim();
+    if (!name || !issuer) { toast('Nom et organisme sont requis', 'error'); return; }
+    const fd = new FormData();
+    fd.append('name',       name);
+    fd.append('issuer',     issuer);
+    fd.append('issue_date', document.getElementById('certDate').value);
+    fd.append('category',   document.getElementById('certCat').value);
+    fd.append('verify_url', document.getElementById('certVerify').value);
+    const f = document.getElementById('certFileInput').files[0];
+    if (f) fd.append('file', f);
+    try {
+      const method = id ? 'PUT' : 'POST';
+      const path   = id ? `/certificates/${id}` : '/certificates';
+      await api(method, path, fd, true);
+      toast(id ? 'Certificat mis à jour !' : 'Certificat ajouté !');
+      closeModal('certModal');
+      loadCerts(); loadStats();
+    } catch(e) { toast(e.message, 'error'); }
+  }
+
+  async function deleteCert(id) {
+    if (!confirm('Supprimer ce certificat définitivement ?')) return;
+    try { await api('DELETE', `/certificates/${id}`); toast('Certificat supprimé'); loadCerts(); loadStats(); }
+    catch(e) { toast(e.message, 'error'); }
+  }
+
+  /* ─── Messages ───────────────────────────────────────── */
+  async function loadMessages() {
+    const tb = document.getElementById('msgsTableBody');
+    try {
+      allMessages = await api('GET', '/messages');
+      if (!allMessages.length) {
+        tb.innerHTML = `<tr><td colspan="4"><div class="empty-state"><i class="fas fa-inbox"></i><p>Aucun message reçu.</p></div></td></tr>`;
+        return;
+      }
+      tb.innerHTML = allMessages.map(m => `
+        <tr class="msg-row ${m.is_read ? '' : 'unread'}" onclick="viewMsg(${m.id})">
+          <td>
+            <div style="font-size:0.9rem;">${m.name || '(Inconnu)'}</div>
+            <div style="font-size:0.78rem;color:var(--t3);">${m.email || ''}</div>
+          </td>
+          <td style="font-size:0.88rem;max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${m.subject || '(Sans objet)'}</td>
+          <td style="font-size:0.8rem;color:var(--t3);white-space:nowrap;">${new Date(m.created_at).toLocaleString('fr-FR', {day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'})}</td>
+          <td>
+            <div class="actions" onclick="event.stopPropagation()">
+              <button class="action-btn view" onclick="viewMsg(${m.id})" title="Lire"><i class="fas fa-eye"></i></button>
+              <button class="action-btn del"  onclick="deleteMsg(${m.id})" title="Supprimer"><i class="fas fa-trash"></i></button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    } catch(e) { tb.innerHTML = `<tr><td colspan="4" style="color:var(--red);text-align:center;padding:20px;">${e.message}</td></tr>`; }
+  }
+
+  function viewMsg(id) {
+    const m = allMessages.find(x => x.id === id);
+    if (!m) return;
+    document.getElementById('msgModalBody').innerHTML = `
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div><div style="font-size:0.78rem;color:var(--t3);margin-bottom:4px;">Expéditeur</div><strong>${m.name||'—'}</strong></div>
+          <div><div style="font-size:0.78rem;color:var(--t3);margin-bottom:4px;">Email</div><a href="mailto:${m.email}" style="color:var(--accent);">${m.email||'—'}</a></div>
+        </div>
+        <div><div style="font-size:0.78rem;color:var(--t3);margin-bottom:4px;">Objet</div><strong>${m.subject||'(Sans objet)'}</strong></div>
+        <div><div style="font-size:0.78rem;color:var(--t3);margin-bottom:8px;">Message</div><div style="background:var(--bg2);padding:16px;border-radius:var(--r-sm);font-size:0.9rem;line-height:1.6;white-space:pre-wrap;">${m.message||''}</div></div>
+        <div style="font-size:0.78rem;color:var(--t3);">Reçu le : ${new Date(m.created_at).toLocaleString('fr-FR')}</div>
+        ${m.email ? `<a href="mailto:${m.email}?subject=Re: ${encodeURIComponent(m.subject||'')}" class="btn btn-primary" style="align-self:flex-start;"><i class="fas fa-reply"></i> Répondre</a>` : ''}
+      </div>
+    `;
+    openModal('msgModal');
+    if (!m.is_read) {
+      api('PUT', `/messages/${id}/read`).then(() => { m.is_read = 1; loadMessages(); loadStats(); }).catch(()=>{});
+    }
+  }
+
+  async function deleteMsg(id) {
+    if (!confirm('Supprimer ce message ?')) return;
+    try { await api('DELETE', `/messages/${id}`); toast('Message supprimé'); loadMessages(); loadStats(); }
+    catch(e) { toast(e.message, 'error'); }
+  }
+
+  /* ─── Settings ───────────────────────────────────────── */
+  document.getElementById('changePassForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const curr = document.getElementById('currPass').value;
+    const nw   = document.getElementById('newPass').value;
+    const conf = document.getElementById('confPass').value;
+    if (nw !== conf) { toast('Les mots de passe ne correspondent pas', 'error'); return; }
+    try {
+      await api('PUT', '/auth/password', { currentPassword: curr, newPassword: nw });
+      toast('Mot de passe mis à jour !');
+      this.reset();
+    } catch(e) { toast(e.message, 'error'); }
+  });
+
+  /* ─── Modal helpers ──────────────────────────────────── */
+  function openModal(id)  { document.getElementById(id).classList.add('open'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+  document.querySelectorAll('.modal-overlay').forEach(m => {
+    m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+  });
+
+  /* ─── File previews ──────────────────────────────────── */
+  function previewImage(input, previewId, areaId) {
+    const file = input.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const prev = document.getElementById(previewId);
+      prev.style.display = 'block';
+      prev.innerHTML = `<div class="upload-preview"><img src="${e.target.result}" /><button type="button" class="remove-btn" onclick="removeFile('${input.id}','${previewId}')"><i class="fas fa-times"></i></button></div>`;
+    };
+    reader.readAsDataURL(file);
+  }
+  function previewFile(input, previewId, areaId) {
+    const file = input.files[0]; if (!file) return;
+    const prev = document.getElementById(previewId);
+    if (file.type === 'application/pdf') {
+      prev.innerHTML = `<div style="display:flex;align-items:center;gap:8px;color:var(--accent);font-size:0.85rem;"><i class="fas fa-file-pdf" style="font-size:1.4rem;color:var(--red);"></i> <strong>${file.name}</strong> (PDF)</div>`;
+    } else {
+      previewImage(input, previewId, areaId);
+    }
+  }
+  function removeFile(inputId, previewId) {
+    document.getElementById(inputId).value = '';
+    document.getElementById(previewId).innerHTML = '';
+    document.getElementById(previewId).style.display = 'none';
+  }
+</script>
+</body>
+</html>
