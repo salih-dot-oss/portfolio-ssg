@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import emailjs from '@emailjs/browser'
 import { useReveal } from '../hooks/useReveal'
 import { supabase } from '../lib/supabase'
 
@@ -27,18 +28,42 @@ export default function Contact() {
   const handleSubmit = async e => {
     e.preventDefault()
     setSending(true); setStatus(null)
+
+    const subject = form.subject || '(Sans objet)'
+
     const { error } = await supabase.from('messages').insert([{
       name:    form.name,
       email:   form.email,
-      subject: form.subject || '(Sans objet)',
+      subject,
       message: form.message,
     }])
+
     if (error) {
-      setStatus({ type: 'error', text: 'Erreur lors de l\'envoi. Veuillez réessayer.' })
-    } else {
-      setStatus({ type: 'success', text: 'Message envoyé avec succès ! Je vous répondrai bientôt.' })
-      setForm({ name: '', email: '', subject: '', message: '' })
+      console.error('[Contact] Supabase insert error:', error)
+      setStatus({ type: 'error', text: `Erreur lors de l'envoi : ${error.message}` })
+      setSending(false)
+      return
     }
+
+    // Notification email
+    try {
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        {
+          from_name:  form.name,
+          from_email: form.email,
+          subject,
+          message:    form.message,
+        },
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      )
+    } catch (emailErr) {
+      console.error('[Contact] EmailJS error:', emailErr)
+    }
+
+    setStatus({ type: 'success', text: 'Message envoyé avec succès ! Je vous répondrai bientôt.' })
+    setForm({ name: '', email: '', subject: '', message: '' })
     setSending(false)
   }
 

@@ -590,7 +590,8 @@ function MessagesPage({ showToast, onRefreshStats }) {
   const [selected, setSelected] = useState(null)
 
   const load = useCallback(async () => {
-    const { data } = await supabase.from('messages').select('*').order('created_at', { ascending: false })
+    const { data, error } = await supabase.from('messages').select('*').order('created_at', { ascending: false })
+    if (error) console.error('[Admin] Erreur chargement messages:', error)
     setMsgs(data || [])
   }, [])
   useEffect(() => { load() }, [load])
