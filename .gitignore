@@ -23,3 +23,9 @@ npm-debug.log*
 Thumbs.db
 .vscode/
 .idea/
+
+
+client/src/cv.css
+client/src/pages/CVDevPage.jsx
+client/src/pages/CVPage.jsx
+

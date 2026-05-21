@@ -93,11 +93,6 @@ function Login({ onLogin }) {
             {busy ? 'Connexion…' : <><i className="fas fa-sign-in-alt"></i> &nbsp;Connexion</>}
           </button>
         </form>
-        <div className="login-hint">
-          <strong style={{ color: 'var(--accent)' }}>Identifiants :</strong><br />
-          Téléphone : <strong>77 746 27 82</strong> ou <strong>76 181 15 74</strong><br />
-          Mot de passe : <strong>Votre adresse email</strong>
-        </div>
       </div>
     </div>
   )
