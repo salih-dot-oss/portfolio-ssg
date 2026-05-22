@@ -8,8 +8,6 @@ const NAV_LINKS = [
   { href: '#education',    label: 'Formation'   },
   { href: '#certificates', label: 'Certificats' },
   { href: '#contact',      label: 'Contact'     },
-  { href: '/cv',           label: 'Mon CV',      isExternal: true },
-  { href: '/cv-dev',       label: 'CV Dev',      isExternal: true },
 ]
 
 export default function Navbar() {
