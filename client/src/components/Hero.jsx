@@ -60,9 +60,6 @@ export default function Hero() {
             <a href="#projects" className="btn btn-primary btn-glow">
               <i className="fas fa-code"></i> Voir mes projets
             </a>
-            <a href="/cv" className="btn btn-outline">
-              <i className="fas fa-file-pdf"></i> Mon CV (PDF)
-            </a>
             <a href="#contact" className="btn btn-outline" style={{ marginLeft: '10px' }}>
               <i className="fas fa-paper-plane"></i> Contact
             </a>
