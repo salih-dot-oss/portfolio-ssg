@@ -25,12 +25,20 @@ export default function Navbar() {
 
   // Active link on scroll
   useEffect(() => {
-    const sections = document.querySelectorAll('section[id]')
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) setActiveLink(`#${e.target.id}`) })
-    }, { threshold: 0.4, rootMargin: '-70px 0px -30% 0px' })
-    sections.forEach(s => observer.observe(s))
-    return () => observer.disconnect()
+    const onScroll = () => {
+      const sections = document.querySelectorAll('section[id]')
+      const navHeight = 80
+      let current = ''
+      sections.forEach(section => {
+        if (section.getBoundingClientRect().top <= navHeight + 10) {
+          current = `#${section.id}`
+        }
+      })
+      setActiveLink(current)
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   const closeMenu = () => setMenuOpen(false)
@@ -44,7 +52,11 @@ export default function Navbar() {
           <ul className="nav-links">
             {NAV_LINKS.map(l => (
               <li key={l.href}>
-                <a href={l.href} className={activeLink === l.href ? 'active' : ''}>
+                <a
+                  href={l.href}
+                  className={activeLink === l.href ? 'active' : ''}
+                  onClick={() => setActiveLink(l.href)}
+                >
                   {l.label}
                 </a>
               </li>
