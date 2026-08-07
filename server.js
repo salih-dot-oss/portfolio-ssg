@@ -15,7 +15,7 @@ const fs      = require('fs');
 
 const app        = express();
 const PORT       = process.env.PORT || 3000;
-const JWT_SECRET = 'ssg_portfolio_jwt_secret_2024_esp_uvs';
+const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-secret-change-in-production';
 
 // ─── Middleware ────────────────────────────────────────────
 app.use(express.json());
