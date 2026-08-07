@@ -18,7 +18,15 @@ const TIMELINE = [
     tags: ['Algorithmique','Structures de données','Programmation','Conception d\'applications'],
   },
   {
-    period: 'Licence 1 — 2024 · Présent',
+    period: 'Licence 2 — 2025 · Présent',
+    degree: 'SIMAC — Sciences Informatiques et Mathématiques de la Cybersécurité',
+    school: 'Université Virtuelle du Sénégal (UVS)',
+    icon: 'fa-user-shield',
+    desc: 'Approfondissement en sécurité offensive et défensive, administration des réseaux et protection des systèmes d\'information.',
+    tags: ['Sécurité offensive','Administration réseaux','Cryptographie','Forensic','Cyberdéfense'],
+  },
+  {
+    period: 'Licence 1 — 2024 · 2025',
     degree: 'SIMAC — Sciences Informatiques et Mathématiques de la Cybersécurité',
     school: 'Université Virtuelle du Sénégal (UVS)',
     icon: 'fa-user-shield',
