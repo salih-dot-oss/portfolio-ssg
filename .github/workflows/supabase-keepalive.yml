@@ -1,0 +1,36 @@
+# Empêche la mise en pause automatique du projet Supabase (plan gratuit).
+# Supabase met en pause tout projet sans activité pendant 7 jours ;
+# ce job envoie une vraie requête API chaque jour pour réinitialiser le compteur.
+name: Supabase Keep-Alive
+
+on:
+  schedule:
+    # Tous les jours à 06:00 UTC
+    - cron: '0 6 * * *'
+  # Permet aussi de le lancer à la main depuis l'onglet Actions
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping de l'API REST Supabase
+        env:
+          SUPABASE_URL: https://eiujeuwbkbteyalfdpal.supabase.co
+          # Clé anon : publique par nature (déjà embarquée dans le bundle du site).
+          SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpdWpldXdia2J0ZXlhbGZkcGFsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2MzI2NTAsImV4cCI6MjA5MDIwODY1MH0.q9Hp6MZeszIv37XvP4DtJF4joXLmeuju2pomfXRYFc4
+        run: |
+          code=$(curl -s -o /tmp/body.txt -w '%{http_code}' \
+            "$SUPABASE_URL/rest/v1/projects?select=id&limit=1" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY")
+
+          echo "HTTP $code"
+          cat /tmp/body.txt
+
+          if [ "$code" != "200" ]; then
+            echo "::error::Le ping Supabase a échoué (HTTP $code) — le projet est peut-être déjà en pause ou la clé a expiré."
+            exit 1
+          fi
+
+          echo "Ping réussi, le compteur d'inactivité est réinitialisé."
