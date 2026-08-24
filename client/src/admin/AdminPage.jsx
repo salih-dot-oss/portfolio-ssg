@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useTheme } from '../context/ThemeContext'
 import { supabase, phoneToEmail, uploadFile, deleteFile } from '../lib/supabase'
+import { captureScreenshot } from '../utils/screenshot'
 
 // ══════════════════════════════════════════════════
 //  TOAST
@@ -199,6 +200,9 @@ function ProjectsManager({ showToast, onRefreshStats }) {
   const [modal,      setModal]      = useState(null)
   const [saving,     setSaving]     = useState(false)
   const [imgPreview, setImgPreview] = useState(null)
+  const [autoShot,  setAutoShot]  = useState(null)
+  const [shooting,  setShooting]  = useState(false)
+  const [shotError, setShotError] = useState(null)
   const [form, setForm] = useState({ name: '', description: '', tech: '', github_url: '', live_url: '', featured: false })
 
   const load = useCallback(async () => {
@@ -209,6 +213,7 @@ function ProjectsManager({ showToast, onRefreshStats }) {
 
   const openModal = (p = null) => {
     setImgPreview(p?.image_url || null)
+    setAutoShot(null); setShooting(false); setShotError(null)
     setForm(p
       ? { name: p.name, description: p.description || '', tech: (p.tech || []).join(', '), github_url: p.github_url || '', live_url: p.live_url || '', featured: !!p.featured }
       : { name: '', description: '', tech: '', github_url: '', live_url: '', featured: false }
@@ -216,18 +221,44 @@ function ProjectsManager({ showToast, onRefreshStats }) {
     setModal(p || {})
   }
 
+  /**
+   * Capture l'aperçu du site à partir du lien live.
+   * En mode silencieux l'échec n'affiche pas de toast : il est signalé sous le
+   * champ, pour ne jamais bloquer l'enregistrement du projet.
+   */
+  const autoCapture = async (rawUrl, { silent = false } = {}) => {
+    if (!(rawUrl || '').trim()) return null
+    setShooting(true); setShotError(null)
+    try {
+      const file = await captureScreenshot(rawUrl)
+      setAutoShot(file)
+      setImgPreview(URL.createObjectURL(file))
+      return file
+    } catch (e) {
+      setShotError(e.message)
+      if (!silent) showToast(e.message, 'error')
+      return null
+    } finally {
+      setShooting(false)
+    }
+  }
+
   const save = async () => {
     if (!form.name.trim()) return showToast('Le nom du projet est requis', 'error')
     setSaving(true)
     try {
       const techArray = form.tech.split(',').map(t => t.trim()).filter(Boolean)
-      const imgEl = document.getElementById('proj-img-input')
       let imageUrl = modal?.image_url || null
 
-      // Upload image si une nouvelle a été choisie
-      if (imgEl?.files[0]) {
+      // L'aperçu vient toujours du lien live : capture déjà faite, sinon à la volée
+      let file = autoShot
+      if (!file && !imageUrl && form.live_url.trim()) {
+        file = await autoCapture(form.live_url, { silent: true })
+      }
+
+      if (file) {
         if (imageUrl) await deleteFile('projects', imageUrl)
-        imageUrl = await uploadFile('projects', imgEl.files[0])
+        imageUrl = await uploadFile('projects', file)
       }
 
       const payload = {
@@ -357,7 +388,10 @@ function ProjectsManager({ showToast, onRefreshStats }) {
             </div>
             <div className="form-group" style={{ flex:1 }}>
               <label className="form-label">Lien Live</label>
-              <input className="form-input" value={form.live_url} onChange={e => setForm(p => ({ ...p, live_url: e.target.value }))} placeholder="https://…" />
+              <input className="form-input" value={form.live_url}
+                onChange={e => setForm(p => ({ ...p, live_url: e.target.value }))}
+                onBlur={e => autoCapture(e.target.value, { silent: true })}
+                placeholder="https://…" />
             </div>
           </div>
           <div className="form-group">
@@ -367,18 +401,37 @@ function ProjectsManager({ showToast, onRefreshStats }) {
             </label>
           </div>
           <div className="form-group">
-            <label className="form-label">Image du projet</label>
-            <div className="upload-area" onClick={() => document.getElementById('proj-img-input').click()}>
-              <input id="proj-img-input" type="file" accept="image/*" style={{ display:'none' }}
-                onChange={e => {
-                  const f = e.target.files[0]; if (!f) return
-                  const r = new FileReader(); r.onload = ev => setImgPreview(ev.target.result); r.readAsDataURL(f)
-                }}
-              />
-              <i className="fas fa-image"></i>
-              <p>Cliquez pour <span>choisir une image</span> (JPG, PNG, WebP)</p>
-            </div>
-            {imgPreview && <img src={imgPreview} alt="preview" className="upload-preview" />}
+            <label className="form-label">
+              Aperçu du projet <span className="form-hint">(capturé automatiquement depuis le lien live)</span>
+            </label>
+
+            {shooting && (
+              <div className="upload-area" style={{ cursor:'default' }}>
+                <i className="fas fa-spinner fa-spin"></i>
+                <p>Capture de la page en cours…</p>
+              </div>
+            )}
+
+            {!shooting && imgPreview && (
+              <img src={imgPreview} alt="aperçu du projet" className="upload-preview" />
+            )}
+
+            {!shooting && !imgPreview && (
+              <div className="upload-area" style={{ cursor:'default' }}>
+                <i className="fas fa-wand-magic-sparkles"></i>
+                <p>Renseignez le <span>lien live</span> ci-dessus : l'aperçu se génère tout seul.</p>
+              </div>
+            )}
+
+            {shotError && (
+              <p className="form-hint" style={{ color:'var(--red)', marginTop:6 }}>{shotError}</p>
+            )}
+
+            <button type="button" className="btn btn-ghost btn-sm" style={{ marginTop:10 }}
+              onClick={() => autoCapture(form.live_url)}
+              disabled={shooting || !form.live_url.trim()}>
+              <i className="fas fa-rotate"></i> Recapturer l'aperçu
+            </button>
           </div>
         </Modal>
       )}
