@@ -77,7 +77,7 @@ function Login({ onLogin }) {
             <label>Numéro de téléphone</label>
             <div className="field-wrap">
               <i className="fas fa-phone field-icon"></i>
-              <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="77 746 27 82" required />
+              <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="77 123 45 67" required />
             </div>
           </div>
           <div className="field">
