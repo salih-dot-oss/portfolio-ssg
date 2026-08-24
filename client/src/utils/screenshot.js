@@ -8,14 +8,21 @@
  * visiteurs du portfolio ne dépendent donc jamais de ces services.
  */
 
+// Format de capture : 1200x630 (ratio 1,90:1).
+// Les cartes projet font 380x220 px, soit ~1,73:1 ; ce ratio proche évite que
+// object-fit:cover ne rogne le haut de la page, là où se trouve l'identité du site.
+const SHOT_WIDTH  = 1200
+const SHOT_HEIGHT = 630
+
 const PROVIDERS = [
   {
     name: 'thum.io',
-    build: url => `https://image.thum.io/get/width/1200/crop/900/noanimate/${url}`,
+    build: url => `https://image.thum.io/get/width/${SHOT_WIDTH}/crop/${SHOT_HEIGHT}/noanimate/${url}`,
   },
   {
     name: 'microlink',
-    build: url => `https://api.microlink.io/?url=${encodeURIComponent(url)}&screenshot=true&meta=false&embed=screenshot.url`,
+    build: url => `https://api.microlink.io/?url=${encodeURIComponent(url)}&screenshot=true&meta=false` +
+      `&viewport.width=${SHOT_WIDTH}&viewport.height=${SHOT_HEIGHT}&embed=screenshot.url`,
   },
 ]
 
