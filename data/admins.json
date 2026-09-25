@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "phone": "777462782",
+    "password_hash": "$2a$12$7V0y8uf8TQkNsz3VTjOdqOWk4l0mdOa4RuJM.g2tTyKWrOAK0jr2m",
+    "name": "Serigne Saliou",
+    "created_at": "2026-03-27T20:59:03.387Z"
+  },
+  {
+    "id": 2,
+    "phone": "761811574",
+    "password_hash": "$2a$12$7V0y8uf8TQkNsz3VTjOdqOWk4l0mdOa4RuJM.g2tTyKWrOAK0jr2m",
+    "name": "Serigne Saliou",
+    "created_at": "2026-03-27T20:59:03.390Z"
+  }
+]
