@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "name": "CS50's Introduction to Programming with Python",
+    "issuer": "Harvard University",
+    "issue_date": "2024",
+    "category": "Génie Logiciel",
+    "verify_url": "https://cs50.harvard.edu/python/",
+    "file_url": "/uploads/certificates/1774655409887_lv7x7x40.png",
+    "created_at": "2026-03-27T20:59:03.398Z"
+  },
+  {
+    "id": 2,
+    "name": "Python Essentials 1",
+    "issuer": "Cisco Networking Academy",
+    "issue_date": "2024",
+    "category": "Génie Logiciel",
+    "verify_url": "https://www.netacad.com/",
+    "file_url": null,
+    "created_at": "2026-03-27T20:59:03.401Z"
+  },
+  {
+    "id": 3,
+    "name": "HCIA-Datacom V1.0",
+    "issuer": "Huawei",
+    "issue_date": "2024",
+    "category": "Cybersécurité",
+    "verify_url": "https://e.huawei.com/",
+    "file_url": null,
+    "created_at": "2026-03-27T20:59:03.403Z"
+  },
+  {
+    "id": 4,
+    "name": "CCNA: Introduction to Networks",
+    "issuer": "Cisco Networking Academy",
+    "issue_date": "2024",
+    "category": "Cybersécurité",
+    "verify_url": "https://www.netacad.com/",
+    "file_url": null,
+    "created_at": "2026-03-27T20:59:03.405Z"
+  }
+]
